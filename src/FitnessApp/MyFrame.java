@@ -45,11 +45,15 @@ public class MyFrame extends JFrame implements ActionListener {
         db.setMnemonic('D');
         JMenuItem auswertung = new JMenuItem("Auswertung");
         JMenuItem nutzerdaten = new JMenuItem("Nutzerdaten");
+        JMenuItem deleteUser = new JMenuItem("Konto löschen");
+        JMenuItem loggout = new JMenuItem("Ausloggen");
         db.add(auswertung);
         db.add(nutzerdaten);
+        db.add(deleteUser);
+        db.add(loggout);
         auswertung.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent ev) {
-                aup = new AuswertungPanel(LoggedUser);
+                aup = new AuswertungPanel(LoggedUser, TrainingseinheitenDAOInstance);
                 changePanel(aup);
             }
         });
@@ -59,6 +63,24 @@ public class MyFrame extends JFrame implements ActionListener {
                 changePanel(ndp);
             }
         });
+        deleteUser.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent ev) {
+                BenutzerDAO.all.remove(LoggedUser);
+                LoggedUser = null;
+                changePanel(lp);
+                System.out.println(BenutzerDAO.all.get(0).getVorname());
+                mb.setVisible(false);
+            }
+        });
+
+        loggout.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent ev) {
+                LoggedUser = null;
+                changePanel(lp);
+                mb.setVisible(false);
+            }
+        });
+
         mb.add(db);
 
         JMenu de = new JMenu("Datenerfassung");
@@ -68,9 +90,10 @@ public class MyFrame extends JFrame implements ActionListener {
 
         trainingsplan.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent ev) {
-                utp = new UserTrainingsplanPanel(LoggedUser);
+                utp = new UserTrainingsplanPanel(LoggedUser, TrainingseinheitenDAOInstance);
                 utp.setLoggedBenutzer(LoggedUser);
                 changePanel(utp);
+
             }
         });
 
@@ -79,10 +102,10 @@ public class MyFrame extends JFrame implements ActionListener {
         JMenu adm = new JMenu("Administration");
         adm.setMnemonic('A');
         JMenuItem userAnzeigen = new JMenuItem("User anzeigen");
-        JMenuItem trainingsplanAll = new JMenuItem("Trainingspläne anzeigen");
+
 
         adm.add(userAnzeigen);
-        adm.add(trainingsplanAll);
+
         mb.add(adm);
 
         userAnzeigen.addActionListener(new ActionListener() {
@@ -91,11 +114,7 @@ public class MyFrame extends JFrame implements ActionListener {
             }
         });
 
-        trainingsplanAll.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent ev) {
-                changePanel(lp);
-            }
-        });
+
 
         setJMenuBar(mb);
 
@@ -115,7 +134,6 @@ public class MyFrame extends JFrame implements ActionListener {
         frame.setVisible(true);
         // default exit action
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        System.out.println(TrainingseinheitenDAO.all.size());
     }
 
     @Override

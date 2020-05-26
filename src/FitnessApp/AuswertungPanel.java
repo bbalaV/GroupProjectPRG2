@@ -7,14 +7,14 @@ class AuswertungPanel extends JPanel {
     JLabel durchHerz;
     JLabel gesZeit;
 
-    public AuswertungPanel(Benutzer LoggedUser) {
+    public AuswertungPanel(Benutzer LoggedUser, TrainingseinheitenDAO TEA) {
         int durchHerzCounter = 0;
         int durchHerzSum = 0;
         int traininghours = 0;
         int trainingminutes = 0;
         String trainingszeit;
         List<Integer> trainingList = LoggedUser.getTrainingsList();
-        for (Trainingseinheit training : TrainingseinheitenDAO.all) {
+        for (Trainingseinheit training : TEA.getAll()) {
             if (trainingList.contains(training.getTid())) {
                 durchHerzCounter++;
                 durchHerzSum += training.getHerzfrequenz();

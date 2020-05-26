@@ -8,10 +8,11 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 
 class UserTrainingsplanPanel extends JPanel {
-    UserTrainingsplanModel utm = new UserTrainingsplanModel();
+    UserTrainingsplanModel utm;
     Benutzer LoggedUser;
 
-    public UserTrainingsplanPanel(Benutzer LoggedUser) {
+    public UserTrainingsplanPanel(Benutzer LoggedUser, TrainingseinheitenDAO TEA) {
+        utm = new UserTrainingsplanModel(TEA);
         JTable adminTable = new JTable(utm);
         adminTable.setColumnSelectionAllowed(false);
         JButton jb = new JButton("Neu");
@@ -28,7 +29,7 @@ class UserTrainingsplanPanel extends JPanel {
 
                 JPanel p1 = new JPanel(new GridLayout(0, 2));
 
-                JDialog TrainingsplanDialog = new JDialog(MyFrame.frame, "tEST");
+                JDialog TrainingsplanDialog = new JDialog(MyFrame.frame, "Erfassen");
                 TrainingsplanDialog.setTitle("Neuen Trainingsplan erfassen");
 
 
@@ -51,9 +52,9 @@ class UserTrainingsplanPanel extends JPanel {
 
 
 //WICHTIG!!!! KORRIGIEREN DAO IST EIN OBJECT, WESWEGEN NEUE INSTANCEN SCHIEFLAUFEN
-                        Trainingseinheit b = new Trainingseinheit(1000 + TrainingseinheitenDAO.all.size(), LocalDate.parse(datumTr), LocalTime.parse(trainingsdauerTr), Integer.parseInt(herzfrequenzTr));
+                        Trainingseinheit b = new Trainingseinheit(1001 + TEA.all.size(), LocalDate.parse(datumTr), LocalTime.parse(trainingsdauerTr), Integer.parseInt(herzfrequenzTr));
 
-                        TrainingseinheitenDAO.all.add(b);
+                        TEA.all.add(b);
                         LoggedUser.setTrainingsList(b.getTid());
 
 

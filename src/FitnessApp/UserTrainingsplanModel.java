@@ -8,8 +8,10 @@ class UserTrainingsplanModel extends AbstractTableModel {
 
     String[] PlanColumn = {"TID", "Datum", "Zeit", "Herzfrequenz"};
     Benutzer LoggedBenutzer;
-    List<Trainingseinheit> referenceList = TrainingseinheitenDAO.all;
-
+    List<Trainingseinheit> referenceList;
+    public UserTrainingsplanModel(TrainingseinheitenDAO TEA){
+        referenceList = TEA.getAll();
+    }
 
     public String getColumnName(int col) {
         return PlanColumn[col];
@@ -29,7 +31,7 @@ class UserTrainingsplanModel extends AbstractTableModel {
     }
 
     public int getRowCount() {
-        return TrainingseinheitenDAO.all.size();
+        return referenceList.size();
     }
 
     public int getColumnCount() {

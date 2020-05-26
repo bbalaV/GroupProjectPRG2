@@ -83,6 +83,7 @@ class NutzerdatenPanel extends JPanel {
                 setEditableFields(false);
                 btnsave.setVisible(false);
                 btnedit.setVisible(true);
+
             }
         });
         btnsave.setVisible(false);

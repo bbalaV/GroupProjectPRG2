@@ -8,7 +8,7 @@ import java.util.List;
 
 
 public class TrainingseinheitenDAO {
-    public static List<Trainingseinheit> all = new LinkedList<Trainingseinheit>();
+    public  List<Trainingseinheit> all = new LinkedList<Trainingseinheit>();
 
     public TrainingseinheitenDAO() {// diese Benutzer sollen existieren
         all.add(new Trainingseinheit(1001, LocalDate.parse("2019-02-15"), LocalTime.parse("12:12:55"), 125));
@@ -37,5 +37,9 @@ public class TrainingseinheitenDAO {
             if (b.getTid() == tid)
                 return b;
         return rb;
+    }
+
+    public void setTrainingseinheit(Trainingseinheit t){
+        all.add(t);
     }
 }
