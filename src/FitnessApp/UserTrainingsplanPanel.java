@@ -10,10 +10,10 @@ import java.time.LocalTime;
 class UserTrainingsplanPanel extends JPanel {
     UserTrainingsplanModel utm;
     Benutzer LoggedUser;
-
+    JTable adminTable;
     public UserTrainingsplanPanel(Benutzer LoggedUser, TrainingseinheitenDAO TEA) {
-        utm = new UserTrainingsplanModel(TEA);
-        JTable adminTable = new JTable(utm);
+        utm = new UserTrainingsplanModel(TEA, LoggedUser);
+        adminTable = new JTable(utm);
         adminTable.setColumnSelectionAllowed(false);
         JButton jb = new JButton("Neu");
         this.LoggedUser = LoggedUser;
@@ -51,11 +51,30 @@ class UserTrainingsplanPanel extends JPanel {
                         String herzfrequenzTr = herzfrequenz.getText();
 
 
+                        String dateformatwrong  = "<p>Datum Format muss so sein: jjjj-mm-tt <br> ";
+                        String timeformatwrong  = "Zeit Format muss so sein: hh:mm:ss; <br> ";
+                        String heartformatwrong = "Herzfrequenz muss eine ganze Zahl sein";
+                        String html = "<html><body width='%1s'><h1>Inkorrekte Eingabe</h1>"
+                                + dateformatwrong
+                                + timeformatwrong
+                                + heartformatwrong;
+
+
+                        JOptionPane.showMessageDialog(MyFrame.frame, String.format(html, 350, 400));
 //WICHTIG!!!! KORRIGIEREN DAO IST EIN OBJECT, WESWEGEN NEUE INSTANCEN SCHIEFLAUFEN
                         Trainingseinheit b = new Trainingseinheit(1001 + TEA.all.size(), LocalDate.parse(datumTr), LocalTime.parse(trainingsdauerTr), Integer.parseInt(herzfrequenzTr));
 
-                        TEA.all.add(b);
+                        TEA.setTrainingseinheit(b);
                         LoggedUser.setTrainingsList(b.getTid());
+
+                        datum.setText(null);
+                        trainingsdauer.setText(null);
+                        herzfrequenz.setText(null);
+                        utm = new UserTrainingsplanModel(TEA, LoggedUser);
+
+                        adminTable.setModel(utm);
+
+                        TrainingsplanDialog.setVisible(false);
 
 
                     }
@@ -71,6 +90,7 @@ class UserTrainingsplanPanel extends JPanel {
 
 
                 TrainingsplanDialog.setSize(400, 400);
+
                 // set dialogbox to modal
                 TrainingsplanDialog.setModal(true);
                 TrainingsplanDialog.setResizable(false);
@@ -91,8 +111,6 @@ class UserTrainingsplanPanel extends JPanel {
 
     }
 
-    public void setLoggedBenutzer(Benutzer b) {
-        utm.setLoggedBenutzer(b);
-    }
+
 
 }

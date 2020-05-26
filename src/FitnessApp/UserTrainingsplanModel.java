@@ -9,8 +9,10 @@ class UserTrainingsplanModel extends AbstractTableModel {
     String[] PlanColumn = {"TID", "Datum", "Zeit", "Herzfrequenz"};
     Benutzer LoggedBenutzer;
     List<Trainingseinheit> referenceList;
-    public UserTrainingsplanModel(TrainingseinheitenDAO TEA){
+    public UserTrainingsplanModel(TrainingseinheitenDAO TEA, Benutzer LoggedUser){
         referenceList = TEA.getAll();
+        this.LoggedBenutzer = LoggedUser;
+        setLoggedBenutzer(LoggedBenutzer);
     }
 
     public String getColumnName(int col) {
@@ -55,7 +57,9 @@ class UserTrainingsplanModel extends AbstractTableModel {
 
 
     }
-
+    public void refreshTable(){
+        fireTableDataChanged();
+    }
     public boolean isCellEditable(int row, int col) {
         return false;
     }

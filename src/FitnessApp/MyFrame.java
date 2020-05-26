@@ -91,7 +91,6 @@ public class MyFrame extends JFrame implements ActionListener {
         trainingsplan.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent ev) {
                 utp = new UserTrainingsplanPanel(LoggedUser, TrainingseinheitenDAOInstance);
-                utp.setLoggedBenutzer(LoggedUser);
                 changePanel(utp);
 
             }
