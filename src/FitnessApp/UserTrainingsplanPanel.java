@@ -6,11 +6,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.format.DateTimeParseException;
 
 class UserTrainingsplanPanel extends JPanel {
     UserTrainingsplanModel utm;
     Benutzer LoggedUser;
     JTable adminTable;
+
     public UserTrainingsplanPanel(Benutzer LoggedUser, TrainingseinheitenDAO TEA) {
         utm = new UserTrainingsplanModel(TEA, LoggedUser);
         adminTable = new JTable(utm);
@@ -46,27 +48,52 @@ class UserTrainingsplanPanel extends JPanel {
                 JButton dialogErf = new JButton("Erfassen");
                 dialogErf.addActionListener(new ActionListener() {
                     public void actionPerformed(ActionEvent arg0) {
+                        Boolean formatCorrect = true;
                         String datumTr = datum.getText();
                         String trainingsdauerTr = trainingsdauer.getText();
                         String herzfrequenzTr = herzfrequenz.getText();
 
 
-                        String dateformatwrong  = "<p>Datum Format muss so sein: jjjj-mm-tt <br> ";
-                        String timeformatwrong  = "Zeit Format muss so sein: hh:mm:ss; <br> ";
-                        String heartformatwrong = "Herzfrequenz muss eine ganze Zahl sein";
-                        String html = "<html><body width='%1s'><h1>Inkorrekte Eingabe</h1>"
-                                + dateformatwrong
-                                + timeformatwrong
-                                + heartformatwrong;
+                       if (!isDateValid(datumTr) || !isTimeValid(trainingsdauerTr) || !herzfrequenzTr.matches("-?\\d+")) {
+                           formatCorrect = false;
+                        }
 
 
-                        JOptionPane.showMessageDialog(MyFrame.frame, String.format(html, 350, 400));
-//WICHTIG!!!! KORRIGIEREN DAO IST EIN OBJECT, WESWEGEN NEUE INSTANCEN SCHIEFLAUFEN
-                        Trainingseinheit b = new Trainingseinheit(1001 + TEA.all.size(), LocalDate.parse(datumTr), LocalTime.parse(trainingsdauerTr), Integer.parseInt(herzfrequenzTr));
+                        if (formatCorrect) {
 
-                        TEA.setTrainingseinheit(b);
-                        LoggedUser.setTrainingsList(b.getTid());
+                            Trainingseinheit b = new Trainingseinheit(1001 + TEA.all.size(), LocalDate.parse(datumTr), LocalTime.parse(trainingsdauerTr), Integer.parseInt(herzfrequenzTr));
 
+                            TEA.setTrainingseinheit(b);
+                            LoggedUser.setTrainingsList(b.getTid());
+
+                            datum.setText(null);
+                            trainingsdauer.setText(null);
+                            herzfrequenz.setText(null);
+                            utm = new UserTrainingsplanModel(TEA, LoggedUser);
+
+                            adminTable.setModel(utm);
+
+                            TrainingsplanDialog.setVisible(false);
+                        } else {
+
+                            String dateformatwrong  = !isDateValid(datumTr) ? "<p>Datum Format muss so sein: jjjj-mm-tt <br> " : "";
+                            String timeformatwrong  = !isTimeValid(trainingsdauerTr) ? "Zeit Format muss so sein: hh:mm:ss; <br> ": "";
+                            String heartformatwrong = !herzfrequenzTr.matches("-?\\d+") ? "Herzfrequenz muss eine ganze Zahl sein": "";
+
+                            String html = "<html><body width='%1s'><h1>Inkorrekte Eingabe</h1>"
+                                    + dateformatwrong
+                                    + timeformatwrong
+                                    + heartformatwrong;
+
+                            JOptionPane.showMessageDialog(MyFrame.frame, String.format(html, 350, 400));
+                        }
+
+
+                    }
+                });
+                JButton dialogAbr = new JButton("Abbrechen");
+                dialogAbr.addActionListener(new ActionListener() {
+                    public void actionPerformed(ActionEvent arg0) {
                         datum.setText(null);
                         trainingsdauer.setText(null);
                         herzfrequenz.setText(null);
@@ -75,12 +102,8 @@ class UserTrainingsplanPanel extends JPanel {
                         adminTable.setModel(utm);
 
                         TrainingsplanDialog.setVisible(false);
-
-
                     }
                 });
-                JButton dialogAbr = new JButton("Abbrechen");
-
                 TrainingsplanDialog.setLayout(new BorderLayout());
                 TrainingsplanDialog.add(p1, BorderLayout.NORTH);
                 JPanel bottom = new JPanel(new GridLayout(0, 2));
@@ -111,6 +134,25 @@ class UserTrainingsplanPanel extends JPanel {
 
     }
 
+    public boolean isDateValid(String dateStr) {
+        try {
+            LocalDate.parse(dateStr);
+        } catch (DateTimeParseException e) {
+            return false;
+        }
+        return true;
+    }
+
+    public boolean isTimeValid(String dateStr) {
+        try {
+            LocalTime.parse(dateStr);
+        } catch (DateTimeParseException e) {
+            return false;
+        }
+        return true;
+    }
 
 
 }
+
+

@@ -3,6 +3,9 @@ package FitnessApp;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -152,20 +155,43 @@ public class MyFrame extends JFrame implements ActionListener {
         }
 
         if (e.getSource() == this.rp.submit) {
-            String nachname = this.rp.registerName.getText().trim();
-            String vorname = this.rp.registerVorname.getText().trim();
-            String password = this.rp.registerPassword.getText().trim();
-            Double gewicht = Double.parseDouble(this.rp.registerGewicht.getText().trim());
-            Integer groesse = Integer.parseInt(this.rp.registerGroesse.getText().trim());
+            Boolean formatCorrect = true;
+            String nachname       = this.rp.registerName.getText().trim();
+            String vorname        = this.rp.registerVorname.getText().trim();
+            String password       = this.rp.registerPassword.getText().trim();
+            String gewichtString  = this.rp.registerGewicht.getText().trim();
+            String groesseString  = this.rp.registerGroesse.getText().trim();
 
-            Benutzer b = new Benutzer(nachname, vorname, password, gewicht, groesse, new ArrayList<Integer>() {
+
+          if(!isDoubleValid(gewichtString) || !isIntValid(groesseString)){
+                formatCorrect = false;
+            }
+
+
+
+if(formatCorrect){
+    Double    gewicht = Double.parseDouble(gewichtString);
+    int       groesse = Integer.parseInt(groesseString);
+    Benutzer b = new Benutzer(nachname, vorname, password, gewicht, groesse, new ArrayList<Integer>() {
                 {
                     add(0000);
                 }
             });
+
             this.LoggedUser = b;
             this.mb.setVisible(true);
-            changePanel(dbp);
+            changePanel(dbp);}
+else{
+    String gewichtFormatwrong  = !isDoubleValid(gewichtString) ? "<p>Gewicht muss eine Zahl mit oder ohne Dezimalstellen sein<br> " : "";
+    String groesseFormatwrong  = !isIntValid(groesseString) ? "Groesse muss in cm eine ganze Zahl sein": "";
+
+    String html = "<html><body width='%1s'><h1>Inkorrekte Eingabe</h1>"
+            + gewichtFormatwrong
+            + groesseFormatwrong;
+
+
+    JOptionPane.showMessageDialog(MyFrame.frame, String.format(html, 350, 400));
+}
         }
 
     }
@@ -194,6 +220,25 @@ public class MyFrame extends JFrame implements ActionListener {
         getContentPane().validate();
         getContentPane().repaint();
     }
+
+    public static boolean isDoubleValid(String doubleValid) {
+        try {
+            Double.parseDouble(doubleValid);
+        } catch (NumberFormatException  e) {
+            return false;
+        }
+        return true;
+    }
+
+    public static boolean isIntValid(String intStr) {
+        try {
+            Integer.parseInt(intStr);
+        } catch (NumberFormatException e) {
+            return false;
+        }
+        return true;
+    }
+
 
 }
 

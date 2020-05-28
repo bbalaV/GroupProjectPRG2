@@ -75,14 +75,31 @@ class NutzerdatenPanel extends JPanel {
         btnsave = new JButton("Save");
         btnsave.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent arg0) {
-                LoggedUser.setName(name.getText());
-                LoggedUser.setVorname(vorname.getText());
-                LoggedUser.setGewicht(Double.parseDouble(gewicht.getText()));
-                LoggedUser.setGroesse(Integer.parseInt(groesse.getText()));
-                LoggedUser.setPasswort(passwort.getText());
-                setEditableFields(false);
-                btnsave.setVisible(false);
-                btnedit.setVisible(true);
+                Boolean formatCorrect = true;
+                if(!MyFrame.isDoubleValid(gewicht.getText()) || !MyFrame.isIntValid(groesse.getText())){
+                    formatCorrect = false;
+                }
+                if(formatCorrect) {
+                    LoggedUser.setName(name.getText());
+                    LoggedUser.setVorname(vorname.getText());
+                    LoggedUser.setGewicht(Double.parseDouble(gewicht.getText()));
+                    LoggedUser.setGroesse(Integer.parseInt(groesse.getText()));
+                    LoggedUser.setPasswort(passwort.getText());
+                    setEditableFields(false);
+                    btnsave.setVisible(false);
+                    btnedit.setVisible(true);
+                } else{
+                    String gewichtFormatwrong  = !MyFrame.isDoubleValid(gewicht.getText()) ? "<p>Gewicht muss eine Zahl mit oder ohne Dezimalstellen sein<br> " : "";
+                    String groesseFormatwrong  = !MyFrame.isIntValid(groesse.getText()) ? "Groesse muss in cm eine ganze Zahl sein": "";
+
+                    String html = "<html><body width='%1s'><h1>Inkorrekte Eingabe</h1>"
+                            + gewichtFormatwrong
+                            + groesseFormatwrong;
+
+
+                    JOptionPane.showMessageDialog(MyFrame.frame, String.format(html, 350, 400));
+                }
+
 
             }
         });
