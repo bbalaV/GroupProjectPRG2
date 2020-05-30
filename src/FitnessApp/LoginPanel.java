@@ -3,7 +3,7 @@ package FitnessApp;
 import javax.swing.*;
 import java.awt.*;
 
-// class for login panel, get's called first in main
+//Loginpage, erste Ansicht
 class LoginPanel extends JPanel {
     JButton login, registration;
     JTextField loginUsername, loginPassword;
@@ -19,6 +19,7 @@ class LoginPanel extends JPanel {
         lblPas = new JLabel("Passwort");
 
         // create new buttons
+        // Buttonfunktionen befinden sich im MyFrame
         login = new JButton("submit");
         registration = new JButton("register");
 

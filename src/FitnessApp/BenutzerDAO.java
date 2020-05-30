@@ -6,7 +6,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class BenutzerDAO {
-    static List<Benutzer> all = new LinkedList<Benutzer>();
+   static List<Benutzer> all = new LinkedList<Benutzer>();
 
     public BenutzerDAO() {// diese Benutzer sollen existieren
         all.add(new Benutzer(1001, "Gerber", "Jolanda", "GEJO", "1234", 97, 177, new ArrayList<Integer>() {
@@ -46,10 +46,4 @@ public class BenutzerDAO {
         all.add(b);
     }
 
-	/* Schnelltest
-	public static void main(String[] args) {
-		BenutzerDAO data = new BenutzerDAO();
-		System.out.println(data.getAll());
-		System.out.println(data.getBenutzer(1002));
-	}*/
 }

@@ -4,7 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
+// Ansicht fuer Nutzerdaten ansehen und editieren
 class NutzerdatenPanel extends JPanel {
     JLabel lblname;
     JLabel lblvorname;
@@ -62,7 +62,7 @@ class NutzerdatenPanel extends JPanel {
 
 
         btnedit = new JButton("Edit");
-
+//Editierbutton
         btnedit.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent arg0) {
                 setEditableFields(true);
@@ -71,15 +71,15 @@ class NutzerdatenPanel extends JPanel {
                 btncancel.setVisible(true);
             }
         });
-
+// Aenderungen speichern
         btnsave = new JButton("Save");
         btnsave.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent arg0) {
                 Boolean formatCorrect = true;
-                if(!MyFrame.isDoubleValid(gewicht.getText()) || !MyFrame.isIntValid(groesse.getText())){
+                if (!Validation.isDoubleValid(gewicht.getText()) || !Validation.isIntValid(groesse.getText())) {
                     formatCorrect = false;
                 }
-                if(formatCorrect) {
+                if (formatCorrect) {
                     LoggedUser.setName(name.getText());
                     LoggedUser.setVorname(vorname.getText());
                     LoggedUser.setGewicht(Double.parseDouble(gewicht.getText()));
@@ -88,9 +88,9 @@ class NutzerdatenPanel extends JPanel {
                     setEditableFields(false);
                     btnsave.setVisible(false);
                     btnedit.setVisible(true);
-                } else{
-                    String gewichtFormatwrong  = !MyFrame.isDoubleValid(gewicht.getText()) ? "<p>Gewicht muss eine Zahl mit oder ohne Dezimalstellen sein<br> " : "";
-                    String groesseFormatwrong  = !MyFrame.isIntValid(groesse.getText()) ? "Groesse muss in cm eine ganze Zahl sein": "";
+                } else {
+                    String gewichtFormatwrong = !Validation.isDoubleValid(gewicht.getText()) ? "<p>Gewicht muss eine Zahl mit oder ohne Dezimalstellen sein<br> " : "";
+                    String groesseFormatwrong = !Validation.isIntValid(groesse.getText()) ? "Groesse muss in cm eine ganze Zahl sein" : "";
 
                     String html = "<html><body width='%1s'><h1>Inkorrekte Eingabe</h1>"
                             + gewichtFormatwrong
@@ -103,6 +103,7 @@ class NutzerdatenPanel extends JPanel {
 
             }
         });
+
         btnsave.setVisible(false);
 
         btncancel = new JButton("Abbrechen");
@@ -113,7 +114,6 @@ class NutzerdatenPanel extends JPanel {
         p2.add(p1, BorderLayout.NORTH);
         p2.add(btnedit, BorderLayout.SOUTH);
         p2.add(btnsave);
-        //p2.add(btncancel);
         add(p2);
 
 

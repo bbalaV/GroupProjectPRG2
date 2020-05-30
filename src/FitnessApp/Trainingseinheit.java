@@ -2,7 +2,7 @@ package FitnessApp;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-
+// Trainingseinheitsobjekt
 public class Trainingseinheit implements Comparable<Trainingseinheit> {
 
     private int tid;
@@ -35,8 +35,8 @@ public class Trainingseinheit implements Comparable<Trainingseinheit> {
         if (getClass() != obj.getClass())
             return false;
         Trainingseinheit other = (Trainingseinheit) obj;
-		return tid == other.tid;
-	}
+        return tid == other.tid;
+    }
 
     public int getTid() {
         return tid;

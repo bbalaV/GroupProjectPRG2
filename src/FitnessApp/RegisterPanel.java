@@ -3,7 +3,7 @@ package FitnessApp;
 import javax.swing.*;
 import java.awt.*;
 
-//class for login panel, get's called second in main
+//Klasse fuer das registrieren
 class RegisterPanel extends JPanel {
     JLabel lblVor, lblNach, lblGr, lblGe, lblPw;
     JButton submit;
@@ -20,10 +20,10 @@ class RegisterPanel extends JPanel {
         lblGe = new JLabel("Gewicht", JLabel.LEFT);
         lblPw = new JLabel("Passwort", JLabel.LEFT);
 
-        // create new button
+        //Buttonfunktion befindet sich in MyFrame
         submit = new JButton("submit");
 
-        // create a object of JTextField with 16 columns
+
         registerVorname = new JTextField(16);
         registerName = new JTextField(16);
         registerPassword = new JTextField(16);

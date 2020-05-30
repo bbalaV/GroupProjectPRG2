@@ -71,7 +71,6 @@ public class MyFrame extends JFrame implements ActionListener {
                 BenutzerDAO.all.remove(LoggedUser);
                 LoggedUser = null;
                 changePanel(lp);
-                System.out.println(BenutzerDAO.all.get(0).getVorname());
                 mb.setVisible(false);
             }
         });
@@ -117,7 +116,6 @@ public class MyFrame extends JFrame implements ActionListener {
         });
 
 
-
         setJMenuBar(mb);
 
     }
@@ -138,8 +136,10 @@ public class MyFrame extends JFrame implements ActionListener {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
 
+
+
     @Override
-    // listening to button clicks
+    // Auf bestimmte Buttonclicks hoeren
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == this.lp.login) {
             if (checkLogin()) {
@@ -156,54 +156,50 @@ public class MyFrame extends JFrame implements ActionListener {
 
         if (e.getSource() == this.rp.submit) {
             Boolean formatCorrect = true;
-            String nachname       = this.rp.registerName.getText().trim();
-            String vorname        = this.rp.registerVorname.getText().trim();
-            String password       = this.rp.registerPassword.getText().trim();
-            String gewichtString  = this.rp.registerGewicht.getText().trim();
-            String groesseString  = this.rp.registerGroesse.getText().trim();
+            String nachname = this.rp.registerName.getText().trim();
+            String vorname = this.rp.registerVorname.getText().trim();
+            String password = this.rp.registerPassword.getText().trim();
+            String gewichtString = this.rp.registerGewicht.getText().trim();
+            String groesseString = this.rp.registerGroesse.getText().trim();
 
 
-          if(!isDoubleValid(gewichtString) || !isIntValid(groesseString)){
+            if (!Validation.isDoubleValid(gewichtString) || !Validation.isIntValid(groesseString)) {
                 formatCorrect = false;
             }
 
 
+            if (formatCorrect) {
+                Double gewicht = Double.parseDouble(gewichtString);
+                int groesse = Integer.parseInt(groesseString);
+                Benutzer b = new Benutzer(nachname, vorname, password, gewicht, groesse, new ArrayList<Integer>() {
+                    {
+                        add(0000);
+                    }
+                });
 
-if(formatCorrect){
-    Double    gewicht = Double.parseDouble(gewichtString);
-    int       groesse = Integer.parseInt(groesseString);
-    Benutzer b = new Benutzer(nachname, vorname, password, gewicht, groesse, new ArrayList<Integer>() {
-                {
-                    add(0000);
-                }
-            });
+                this.LoggedUser = b;
+                this.mb.setVisible(true);
+                changePanel(dbp);
+            } else {
+                //Wenn eines der Formate falsch ist dann Dialog mit zu korrigierenden Sachen anzeigen
+                String gewichtFormatwrong = !Validation.isDoubleValid(gewichtString) ? "<p>Gewicht muss eine Zahl mit oder ohne Dezimalstellen sein<br> " : "";
+                String groesseFormatwrong = !Validation.isIntValid(groesseString) ? "Groesse muss in cm eine ganze Zahl sein" : "";
 
-            this.LoggedUser = b;
-            this.mb.setVisible(true);
-            changePanel(dbp);}
-else{
-    String gewichtFormatwrong  = !isDoubleValid(gewichtString) ? "<p>Gewicht muss eine Zahl mit oder ohne Dezimalstellen sein<br> " : "";
-    String groesseFormatwrong  = !isIntValid(groesseString) ? "Groesse muss in cm eine ganze Zahl sein": "";
-
-    String html = "<html><body width='%1s'><h1>Inkorrekte Eingabe</h1>"
-            + gewichtFormatwrong
-            + groesseFormatwrong;
+                String html = "<html><body width='%1s'><h1>Inkorrekte Eingabe</h1>"
+                        + gewichtFormatwrong
+                        + groesseFormatwrong;
 
 
-    JOptionPane.showMessageDialog(MyFrame.frame, String.format(html, 350, 400));
-}
+                JOptionPane.showMessageDialog(MyFrame.frame, String.format(html, 350, 400));
+            }
         }
 
     }
 
-    // check if login is successful and return bool value
+    // Schauen ob Login erfolgreich ist
     boolean checkLogin() {
-        // BenutzerDAO test = new BenutzerDAO();
-        System.out.println(BenutzerDAO.all);
         List<Benutzer> allUsers = BenutzerDAO.all;
         for (Benutzer b : allUsers) {
-            System.out.println("Passwort: " + b.getPasswort());
-            System.out.println("Name: " + b.getBenutzername());
             if (b.getBenutzername().equals(this.lp.loginUsername.getText().trim())
                     && b.getPasswort().equals(this.lp.loginPassword.getText().trim())) {
                 this.LoggedUser = b;
@@ -213,48 +209,12 @@ else{
         return false;
     }
 
-    // rerender frame with specific panel
+    // Ansichten Aendern
     void changePanel(JPanel panel) {
         getContentPane().removeAll();
         getContentPane().add(panel);
         getContentPane().validate();
         getContentPane().repaint();
-    }
-
-    public static boolean isDoubleValid(String doubleValid) {
-        try {
-            Double.parseDouble(doubleValid);
-        } catch (NumberFormatException  e) {
-            return false;
-        }
-        return true;
-    }
-
-    public static boolean isIntValid(String intStr) {
-        try {
-            Integer.parseInt(intStr);
-        } catch (NumberFormatException e) {
-            return false;
-        }
-        return true;
-    }
-
-    public static boolean isDateValid(String dateStr) {
-        try {
-            LocalDate.parse(dateStr);
-        } catch (DateTimeParseException e) {
-            return false;
-        }
-        return true;
-    }
-
-    public static boolean isTimeValid(String dateStr) {
-        try {
-            LocalTime.parse(dateStr);
-        } catch (DateTimeParseException e) {
-            return false;
-        }
-        return true;
     }
 
 

@@ -2,7 +2,7 @@ package FitnessApp;
 
 import javax.swing.*;
 
-//class for login panel, get's called first in main
+//Ansicht nachdem Einloggen
 class DashboardPanel extends JPanel {
     JLabel jl;
 

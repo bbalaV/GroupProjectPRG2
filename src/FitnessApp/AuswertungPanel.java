@@ -2,7 +2,7 @@ package FitnessApp;
 
 import javax.swing.*;
 import java.util.List;
-
+// Ansicht für Auswertung
 class AuswertungPanel extends JPanel {
     JLabel durchHerz;
     JLabel gesZeit;
@@ -14,6 +14,7 @@ class AuswertungPanel extends JPanel {
         int trainingminutes = 0;
         String trainingszeit;
         List<Integer> trainingList = LoggedUser.getTrainingsList();
+        // Durch alle Trainingseinheiten vom User loopen und Werte fuer Bewertung berechnen
         for (Trainingseinheit training : TEA.getAll()) {
             if (trainingList.contains(training.getTid())) {
                 durchHerzCounter++;
@@ -24,6 +25,7 @@ class AuswertungPanel extends JPanel {
             }
 
         }
+        // Einzeigen der Auswertung
         if (durchHerzCounter == 0) {
             add(new JLabel("Kein Training absolviert"));
         } else {

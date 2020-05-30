@@ -7,12 +7,14 @@ import java.awt.event.ActionListener;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeParseException;
-
+//  Ansicht für Trainingspläne für User
 class UserTrainingsplanPanel extends JPanel {
+
     UserTrainingsplanModel utm;
     Benutzer LoggedUser;
     JTable adminTable;
     Boolean editToggle = false;
+
     public UserTrainingsplanPanel(Benutzer LoggedUser, TrainingseinheitenDAO TEA) {
         utm = new UserTrainingsplanModel(TEA, LoggedUser);
         adminTable = new JTable(utm);
@@ -24,23 +26,28 @@ class UserTrainingsplanPanel extends JPanel {
         adminTable.setEnabled(false);
         this.LoggedUser = LoggedUser;
 
+        //Löschen von Einträgen
         jbDelete.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent arg0) {
+                if(adminTable.getSelectedRow() >= 0){
                 LoggedUser.deleteTrainingsList(utm.referenceList.get(adminTable.getSelectedRow()).getTid());
                 utm = new UserTrainingsplanModel(TEA, LoggedUser);
-                adminTable.setModel(utm);
+                adminTable.setModel(utm);}
 
 
-            }});
 
+            }
+        });
+
+        //Editieren von Einträgen
         jbEdit.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent arg0) {
-                if(editToggle){
+                if (editToggle) {
                     editToggle = false;
                     jbEdit.setText("Editieren");
                     adminTable.setEnabled(editToggle);
                     jbDelete.setVisible(false);
-                }else{
+                } else {
                     editToggle = true;
                     jbEdit.setText("Abbrechnen");
                     adminTable.setEnabled(editToggle);
@@ -48,8 +55,9 @@ class UserTrainingsplanPanel extends JPanel {
                 }
                 adminTable.setEnabled(editToggle);
 
-            }});
-
+            }
+        });
+// Neuen Eintrag erfassen durch Dialogbox
         jb.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent arg0) {
                 JTextField datum = new JTextField();
@@ -76,11 +84,8 @@ class UserTrainingsplanPanel extends JPanel {
                 p1.add(herzfrequenz);
 
 
-
-
-
-
                 JButton dialogErf = new JButton("Erfassen");
+                //Dialog ueberpruefen und erfassen
                 dialogErf.addActionListener(new ActionListener() {
                     public void actionPerformed(ActionEvent arg0) {
                         Boolean formatCorrect = true;
@@ -89,8 +94,8 @@ class UserTrainingsplanPanel extends JPanel {
                         String herzfrequenzTr = herzfrequenz.getText();
 
 
-                       if (!isDateValid(datumTr) || !isTimeValid(trainingsdauerTr) || !herzfrequenzTr.matches("-?\\d+")) {
-                           formatCorrect = false;
+                        if (!Validation.isDateValid(datumTr) || !Validation.isTimeValid(trainingsdauerTr) || !herzfrequenzTr.matches("-?\\d+")) {
+                            formatCorrect = false;
                         }
 
 
@@ -111,9 +116,9 @@ class UserTrainingsplanPanel extends JPanel {
                             TrainingsplanDialog.setVisible(false);
                         } else {
 
-                            String dateformatwrong  = !isDateValid(datumTr) ? "<p>Datum Format muss so sein: jjjj-mm-tt <br> " : "";
-                            String timeformatwrong  = !isTimeValid(trainingsdauerTr) ? "Zeit Format muss so sein: hh:mm:ss; <br> ": "";
-                            String heartformatwrong = !herzfrequenzTr.matches("-?\\d+") ? "Herzfrequenz muss eine ganze Zahl sein": "";
+                            String dateformatwrong = !Validation.isDateValid(datumTr) ? "<p>Datum Format muss so sein: jjjj-mm-tt <br> " : "";
+                            String timeformatwrong = !Validation.isTimeValid(trainingsdauerTr) ? "Zeit Format muss so sein: hh:mm:ss; <br> " : "";
+                            String heartformatwrong = !herzfrequenzTr.matches("-?\\d+") ? "Herzfrequenz muss eine ganze Zahl sein" : "";
 
                             String html = "<html><body width='%1s'><h1>Inkorrekte Eingabe</h1>"
                                     + dateformatwrong
@@ -126,6 +131,7 @@ class UserTrainingsplanPanel extends JPanel {
 
                     }
                 });
+                //Dialogbox abbrechen
                 JButton dialogAbr = new JButton("Abbrechen");
                 dialogAbr.addActionListener(new ActionListener() {
                     public void actionPerformed(ActionEvent arg0) {
@@ -139,6 +145,7 @@ class UserTrainingsplanPanel extends JPanel {
                         TrainingsplanDialog.setVisible(false);
                     }
                 });
+
                 TrainingsplanDialog.setLayout(new BorderLayout());
                 TrainingsplanDialog.add(p1, BorderLayout.NORTH);
                 JPanel bottom = new JPanel(new GridLayout(0, 2));
@@ -149,7 +156,7 @@ class UserTrainingsplanPanel extends JPanel {
 
                 TrainingsplanDialog.setSize(400, 400);
 
-                // set dialogbox to modal
+                //Modal setzen
                 TrainingsplanDialog.setModal(true);
                 TrainingsplanDialog.setResizable(false);
                 TrainingsplanDialog.setVisible(true);
@@ -172,23 +179,7 @@ class UserTrainingsplanPanel extends JPanel {
 
     }
 
-    public boolean isDateValid(String dateStr) {
-        try {
-            LocalDate.parse(dateStr);
-        } catch (DateTimeParseException e) {
-            return false;
-        }
-        return true;
-    }
 
-    public boolean isTimeValid(String dateStr) {
-        try {
-            LocalTime.parse(dateStr);
-        } catch (DateTimeParseException e) {
-            return false;
-        }
-        return true;
-    }
 
 
 }
