@@ -239,6 +239,24 @@ else{
         return true;
     }
 
+    public static boolean isDateValid(String dateStr) {
+        try {
+            LocalDate.parse(dateStr);
+        } catch (DateTimeParseException e) {
+            return false;
+        }
+        return true;
+    }
+
+    public static boolean isTimeValid(String dateStr) {
+        try {
+            LocalTime.parse(dateStr);
+        } catch (DateTimeParseException e) {
+            return false;
+        }
+        return true;
+    }
+
 
 }
 

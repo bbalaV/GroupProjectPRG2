@@ -132,4 +132,8 @@ public class Benutzer implements Comparable<Benutzer> {
     public void setTrainingsList(int Training) {
         this.trainingsList.add(Training);
     }
+
+    public void deleteTrainingsList(int Training){
+        this.trainingsList.remove((Integer) Training);
+    }
 }

@@ -12,17 +12,16 @@ public class BenutzerDAO {
         all.add(new Benutzer(1001, "Gerber", "Jolanda", "GEJO", "1234", 97, 177, new ArrayList<Integer>() {
             {
                 add(1001);
-                add(1003);
             }
         }));
         all.add(new Benutzer(1002, "Gerber", "Michael", "GEMI", "abcd", 45, 125, new ArrayList<Integer>() {
             {
-                add(1001);
+                add(1002);
             }
         }));
         all.add(new Benutzer(1003, "Winkler", "Kilian", "WIKI", "wikipedia", 120, 45, new ArrayList<Integer>() {
             {
-                add(1001);
+                add(1003);
             }
         }));
     }

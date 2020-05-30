@@ -39,7 +39,12 @@ public class TrainingseinheitenDAO {
         return rb;
     }
 
+
+
     public void setTrainingseinheit(Trainingseinheit t){
         all.add(t);
+    }
+    public void deleteTrainingseinheit(Trainingseinheit t){
+        all.remove(t);
     }
 }

@@ -12,13 +12,44 @@ class UserTrainingsplanPanel extends JPanel {
     UserTrainingsplanModel utm;
     Benutzer LoggedUser;
     JTable adminTable;
-
+    Boolean editToggle = false;
     public UserTrainingsplanPanel(Benutzer LoggedUser, TrainingseinheitenDAO TEA) {
         utm = new UserTrainingsplanModel(TEA, LoggedUser);
         adminTable = new JTable(utm);
         adminTable.setColumnSelectionAllowed(false);
         JButton jb = new JButton("Neu");
+        JButton jbEdit = new JButton("Editieren");
+        JButton jbDelete = new JButton("Löschen");
+        jbDelete.setVisible(false);
+        adminTable.setEnabled(false);
         this.LoggedUser = LoggedUser;
+
+        jbDelete.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent arg0) {
+                LoggedUser.deleteTrainingsList(utm.referenceList.get(adminTable.getSelectedRow()).getTid());
+                utm = new UserTrainingsplanModel(TEA, LoggedUser);
+                adminTable.setModel(utm);
+
+
+            }});
+
+        jbEdit.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent arg0) {
+                if(editToggle){
+                    editToggle = false;
+                    jbEdit.setText("Editieren");
+                    adminTable.setEnabled(editToggle);
+                    jbDelete.setVisible(false);
+                }else{
+                    editToggle = true;
+                    jbEdit.setText("Abbrechnen");
+                    adminTable.setEnabled(editToggle);
+                    jbDelete.setVisible(true);
+                }
+                adminTable.setEnabled(editToggle);
+
+            }});
+
         jb.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent arg0) {
                 JTextField datum = new JTextField();
@@ -43,6 +74,10 @@ class UserTrainingsplanPanel extends JPanel {
 
                 p1.add(lblherzf);
                 p1.add(herzfrequenz);
+
+
+
+
 
 
                 JButton dialogErf = new JButton("Erfassen");
@@ -126,7 +161,10 @@ class UserTrainingsplanPanel extends JPanel {
             }
         });
 
+
         add(jb);
+        add(jbDelete);
+        add(jbEdit);
         add(new JSeparator());
         add(new JLabel("Alle Trainingspläne", JLabel.CENTER));
         add(new JSeparator());
